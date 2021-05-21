@@ -63,6 +63,7 @@ class CPU_6502 {
           nullptr,nullptr,nullptr,nullptr,
           nullptr,nullptr,nullptr,nullptr,
           nullptr,[&]() {
+            cycles+=2;
             a=fetch();
             n=(a & 0x80)?1:0;
             z=(a==0);
@@ -99,6 +100,7 @@ public:
   addr pc;
   memword a,x,y,sp;
   bool n,z,c,i,d,v;
+  uint64_t cycles;
   dataword fetch() {
     return 0xA9;
   }
@@ -107,11 +109,13 @@ public:
   }
   void reset() {
     pc=0xFFFC;
+    cycles=0;
   }
 };
 
+CPU_6502 cpu;
+
 int main() {
-  CPU_6502 cpu;
   cpu.reset();
   cpu.execute();
 }
